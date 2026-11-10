@@ -1,6 +1,6 @@
 import { OrchestrationError } from '../../../../orchestration/orchestration-error'
 import type { RemoteDispatchAttachmentRow } from '../../../../orchestration/db/orchestration-records'
-import { defineMethod } from '../../../core'
+import { defineOrchestrationMethod } from '../access/orchestration-method-access'
 import { isUserKeptWorkerTerminalOwner } from '../../../../orchestration/db/worker-terminal/worker-terminal-user-keep'
 import { mapWithConcurrency } from '../../../../../../shared/map-with-concurrency'
 import { readExactWorkerOutput } from '../worker/worker-output'
@@ -22,8 +22,9 @@ import {
 } from '../../../../../../shared/rpc-contract/orchestration-federation-control-params'
 
 export const ORCHESTRATION_FEDERATION_CONTROL_METHODS = [
-  defineMethod({
+  defineOrchestrationMethod({
     name: 'orchestration.federationFleetSnapshot',
+    access: { kind: 'localOnly', targets: { dispatchIds: 'dispatch' } },
     permission: 'workspace',
     params: FederationFleetSnapshotParams,
     handler: async (params, { runtime, authenticatedCallerFingerprint }) => {
@@ -58,8 +59,9 @@ export const ORCHESTRATION_FEDERATION_CONTROL_METHODS = [
       return { runtimeEpoch: runtime.getRuntimeId(), items }
     }
   }),
-  defineMethod({
+  defineOrchestrationMethod({
     name: 'orchestration.federationRelease',
+    access: { kind: 'localOnly', targets: { dispatchId: 'dispatch' } },
     permission: 'workspace',
     params: FederationDispatchParams,
     handler: async (params, { runtime, authenticatedCallerFingerprint }) => {
@@ -72,8 +74,9 @@ export const ORCHESTRATION_FEDERATION_CONTROL_METHODS = [
       return releaseRemoteAttachment({ runtime, attachment, observation })
     }
   }),
-  defineMethod({
+  defineOrchestrationMethod({
     name: 'orchestration.federationRetain',
+    access: { kind: 'localOnly', targets: { dispatchId: 'dispatch' } },
     permission: 'workspace',
     params: FederationDispatchParams,
     handler: (params, { runtime, authenticatedCallerFingerprint }) => {
@@ -84,8 +87,9 @@ export const ORCHESTRATION_FEDERATION_CONTROL_METHODS = [
       )
     }
   }),
-  defineMethod({
+  defineOrchestrationMethod({
     name: 'orchestration.federationShow',
+    access: { kind: 'localOnly', targets: { dispatchId: 'dispatch' } },
     permission: 'workspace',
     params: FederationDispatchParams,
     handler: async (params, { runtime, authenticatedCallerFingerprint }) => {
@@ -113,8 +117,9 @@ export const ORCHESTRATION_FEDERATION_CONTROL_METHODS = [
       }
     }
   }),
-  defineMethod({
+  defineOrchestrationMethod({
     name: 'orchestration.federationRead',
+    access: { kind: 'localOnly', targets: { dispatchId: 'dispatch' } },
     permission: 'workspace',
     params: FederationReadParams,
     handler: async (params, { runtime, authenticatedCallerFingerprint }) => {
@@ -137,8 +142,9 @@ export const ORCHESTRATION_FEDERATION_CONTROL_METHODS = [
       }
     }
   }),
-  defineMethod({
+  defineOrchestrationMethod({
     name: 'orchestration.federationReadOutput',
+    access: { kind: 'localOnly', targets: { dispatchId: 'dispatch' } },
     permission: 'workspace',
     params: FederationOutputReadParams,
     handler: async (params, { runtime, authenticatedCallerFingerprint }) => {
@@ -221,8 +227,9 @@ export const ORCHESTRATION_FEDERATION_CONTROL_METHODS = [
       }
     }
   }),
-  defineMethod({
+  defineOrchestrationMethod({
     name: 'orchestration.federationStop',
+    access: { kind: 'localOnly', targets: { dispatchId: 'dispatch' } },
     permission: 'workspace',
     params: FederationDispatchParams,
     handler: async (params, { runtime, authenticatedCallerFingerprint, orchestrationMutation }) => {
